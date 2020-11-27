@@ -43,7 +43,7 @@ if sport == 'tennis':
         pause.until(login_datetime)
 
     # opening a chrome session and navigating to the login page
-    driver = Chrome()
+    driver = Chrome(options=chrome_options)
     driver.get('https://dmsonline.uvt.nl/en/auth/connect_uvt')
     time.sleep(3)
 
