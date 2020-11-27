@@ -2,11 +2,20 @@
 import datetime
 import pause
 import time
+import platform
 from getpass import getpass
 
 from selenium.webdriver.common.keys import Keys
 from seleniumrequests import Chrome
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+
+if platform.system() == 'Linux':
+    chrome_options = Options()
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')
+else: chrome_options = Options()
 
 # get user input
 sport = input('What do you want to (de)-enrol for? Format: [tennis/crossfit]\n')
