@@ -108,7 +108,7 @@ elif sport == 'crossfit':
         pause.until(execute_date)
 
     # retrieve login page and enter login details
-    driver = webdriver.Chrome()
+    driver = webdriver.Chrome(options=chrome_options)
     driver.get("https://crossfitclubpiushaven.sportbitapp.nl/cbm/account/inloggen/")
     username_elem = driver.find_element_by_name("username")
     username_elem.clear()
