@@ -93,6 +93,11 @@ if sport == 'tennis':
     add_booking_url = 'https://dmsonline.uvt.nl/en/bookings/addBooking'
     driver.request('POST', add_booking_url, data=booking_payload)
 
+    # close chromedriver after execution
+    time.sleep(5)
+    driver.close()
+    driver.quit()
+
 elif sport == 'crossfit':
     # get user input
     username = input("What is your login e-mailaddress?\n")
@@ -140,3 +145,8 @@ elif sport == 'crossfit':
         driver.get(enrol_url)
     elif de_enrol_bool == 'de-enrol':
         driver.get(de_enrol_url)
+
+    # close chromedriver after execution
+    time.sleep(5)
+    driver.close()
+    driver.quit()
