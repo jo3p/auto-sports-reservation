@@ -1,3 +1,0 @@
-pause~=0.3
-selenium~=3.141.0
-selenium-requests==1.3
