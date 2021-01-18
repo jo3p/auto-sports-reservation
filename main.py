@@ -42,6 +42,8 @@ if sport == 'tennis':
         execution_date_datetime = reservation_date_datetime - datetime.timedelta(days=7)
         login_datetime = execution_date_datetime - datetime.timedelta(seconds=30)
         pause.until(login_datetime)
+    else:
+        postponed = False
 
     # opening a chrome session and navigating to the login page
     driver = Chrome(options=chrome_options)
@@ -114,6 +116,8 @@ elif sport == 'crossfit':
         execute_date_datetime = reservation_date - datetime.timedelta(days=7)
         login_date_datetime = execute_date_datetime
         pause.until(login_date_datetime)
+    else:
+        postponed = False
 
     # retrieve login page
     driver = webdriver.Chrome(options=chrome_options)
