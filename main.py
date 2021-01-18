@@ -40,7 +40,7 @@ if sport == 'tennis':
     if (reservation_date_datetime - datetime.timedelta(days=7)) > datetime.datetime.now():
         postponed = True
         execution_date_datetime = reservation_date_datetime - datetime.timedelta(days=7)
-        login_datetime = execution_date_datetime - datetime.timedelta(seconds=30)
+        login_datetime = execution_date_datetime - datetime.timedelta(seconds=120)
         pause.until(login_datetime)
     else:
         postponed = False
@@ -113,9 +113,9 @@ elif sport == 'crossfit':
     # check if reservation date is within 7 days, if not: wait
     if (reservation_date - datetime.timedelta(days=7)) > datetime.datetime.now():
         postponed = True
-        execute_date_datetime = reservation_date - datetime.timedelta(days=7)
-        login_date_datetime = execute_date_datetime
-        pause.until(login_date_datetime)
+        execution_date_datetime = reservation_date - datetime.timedelta(days=7)
+        login_datetime = execution_date_datetime - datetime.timedelta(seconds=120)
+        pause.until(login_datetime)
     else:
         postponed = False
 
@@ -151,7 +151,7 @@ elif sport == 'crossfit':
 
     # if the login was postponed before, execute the actual booking 1sec past midnight
     if postponed:
-        send_request_datetime = execute_date_datetime + datetime.timedelta(seconds=1)
+        send_request_datetime = execution_date_datetime + datetime.timedelta(seconds=1)
         pause.until(send_request_datetime)
 
     if de_enrol_bool == 'enrol':
