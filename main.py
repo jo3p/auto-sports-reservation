@@ -15,7 +15,8 @@ if platform.system() == 'Linux':
     chrome_options.add_argument('--headless')
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
-else: chrome_options = Options()
+else:
+    chrome_options = Options()
 
 # get user input
 sport = input('What do you want to (de)-enrol for? Format: [tennis/crossfit]\n')
@@ -54,7 +55,7 @@ if sport == 'tennis':
     search_bar.send_keys(Keys.RETURN)
     time.sleep(3)
 
-    # fill in the username and password
+    # fill credentials
     username_field = driver.find_element_by_id('username')
     username_field.click()
     username_field.clear()
@@ -84,9 +85,9 @@ if sport == 'tennis':
 
     }
 
-    # if the login was postponed before, execute the actual booking 3secs past midnight
+    # if the login was postponed before, execute the actual booking 1sec past midnight
     if postponed:
-        send_request_datetime = execution_date_datetime + datetime.timedelta(seconds=3)
+        send_request_datetime = execution_date_datetime + datetime.timedelta(seconds=1)
         pause.until(send_request_datetime)
 
     # make actual booking
@@ -109,12 +110,16 @@ elif sport == 'crossfit':
 
     # check if reservation date is within 7 days, if not: wait
     if (reservation_date - datetime.timedelta(days=7)) > datetime.datetime.now():
-        execute_date = reservation_date - datetime.timedelta(days=7) + datetime.timedelta(seconds=10)
-        pause.until(execute_date)
+        postponed = True
+        execute_date_datetime = reservation_date - datetime.timedelta(days=7)
+        login_date_datetime = execute_date_datetime
+        pause.until(login_date_datetime)
 
-    # retrieve login page and enter login details
+    # retrieve login page
     driver = webdriver.Chrome(options=chrome_options)
     driver.get("https://crossfitclubpiushaven.sportbitapp.nl/cbm/account/inloggen/")
+
+    # fill credentials
     username_elem = driver.find_element_by_name("username")
     username_elem.clear()
     username_elem.send_keys(username)
@@ -125,12 +130,11 @@ elif sport == 'crossfit':
     password_elem.send_keys(Keys.RETURN)
     time.sleep(2)
 
-    # continue enrolment
     # go to the right overview page by weeknumber
     weeknumber = reservation_date.isocalendar()[1]
     year = reservation_date.isocalendar()[0]
     driver.get(
-        f"https://crossfitclubpiushaven.sportbitapp.nl/cbm/account/lesmomenten/?locatie=1&year={year}&week={weeknumber}")
+        f"https://crossfitclubpiushaven.sportbitapp.nl/cbm/account/lesmomenten/?year={year}&week={weeknumber}")
     time.sleep(1)
 
     # retrieve the sign-on url from the overview webpage
@@ -140,6 +144,11 @@ elif sport == 'crossfit':
     enrol_url = lesson_url + "aanmelden"
     de_enrol_url = lesson_url + "afmelden"
     time.sleep(1)
+
+    # if the login was postponed before, execute the actual booking 1sec past midnight
+    if postponed:
+        send_request_datetime = execute_date_datetime + datetime.timedelta(seconds=1)
+        pause.until(send_request_datetime)
 
     if de_enrol_bool == 'enrol':
         driver.get(enrol_url)
