@@ -81,7 +81,7 @@ with WebDriver(Chrome(options=chrome_options)) as driver:
 
     # if the login was postponed before, execute the actual booking 1sec past midnight
     if postponed:
-        send_request_datetime = execution_date_datetime + datetime.timedelta(seconds=3)
+        send_request_datetime = execution_date_datetime + datetime.timedelta(seconds=1)
         pause.until(send_request_datetime)
 
     # make actual booking
