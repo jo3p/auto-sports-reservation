@@ -4,9 +4,9 @@ import time
 from getpass import getpass
 
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import NoSuchElementException
 from seleniumrequests import Chrome
 from helpers import WebDriver, chrome_options
-
 
 # get user input
 username = input("What is your login e-mailaddress?\n")
@@ -51,10 +51,12 @@ with WebDriver(Chrome(options=chrome_options)) as driver:
         f"https://crossfitclubpiushaven.sportbitapp.nl/cbm/account/lesmomenten/?year={year}&week={weeknumber}")
     time.sleep(1)
 
-    # retrieve the sign-on url from the overview webpage
-    lesson_url = driver.find_element_by_css_selector(
-        f"[data-date='{reservation_date_string}'][data-time-start='{reservation_start_time_string}']") \
-        .get_attribute("href")
+    try:
+        lesson_url = driver.find_element_by_css_selector(
+            f'[href*="training-info/{reservation_date_string}/{reservation_start_time_string}"]').get_attribute("href")
+    except NoSuchElementException as e:
+        lesson_url = driver.find_element_by_css_selector(
+            f'[href*="training-info/{reservation_date_string}/{reservation_start_time_string}"]').get_attribute("href")
     enrol_url = lesson_url + "aanmelden"
     time.sleep(1)
 
