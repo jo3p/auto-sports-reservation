@@ -55,8 +55,9 @@ with WebDriver(Chrome(options=chrome_options)) as driver:
         lesson_url = driver.find_element_by_css_selector(
             f'[href*="training-info/{reservation_date_string}/{reservation_start_time_string}"]').get_attribute("href")
     except NoSuchElementException as e:
-        lesson_url = driver.find_element_by_css_selector(
-            f'[href*="training-info/{reservation_date_string}/{reservation_start_time_string}"]').get_attribute("href")
+        lesson_url = 'https://crossfitclubpiushaven.sportbitapp.nl/cbm/' + driver.find_element_by_css_selector(
+            f'[data-href*="training-info/{reservation_date_string}/{reservation_start_time_string}"]') \
+            .get_attribute("data-href")
     enrol_url = lesson_url + "aanmelden"
     time.sleep(1)
 
