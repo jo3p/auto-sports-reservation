@@ -1,6 +1,8 @@
 import datetime
 import pause
 import time
+import sys
+import os
 from getpass import getpass
 
 from selenium.webdriver.common.keys import Keys
@@ -8,9 +10,19 @@ from selenium.common.exceptions import NoSuchElementException
 from seleniumrequests import Chrome
 from helpers import WebDriver, chrome_options
 
-# get user input
-username = input("What is your login e-mailaddress?\n")
-password = getpass("What is your password?\n")  # getpass is used in order to securely input the password
+# get credentials
+which_user = input("Make a reservation for? (joep/vera)")
+if which_user == "joep":
+    username = os.environ['EMAIL_JOEP']
+    password = os.environ['PW_JOEP']
+elif which_user == "vera":
+    username = os.environ['EMAIL_VERA']
+    password = os.environ['PW_VERA']
+else:
+    print("User not recognized. Please fill in credentials manually below.")
+    username = input("What is your login e-mailaddress?\n")
+    password = getpass("What is your password?\n")  # getpass is used in order to securely input the password
+
 reservation_date_string = input("Give in a date in the following format: dd-mm-yyyy\n")
 reservation_start_time_string = input("Give in a start time in the following format: hh:mm\n")
 reservation_date_datetime = datetime.datetime.strptime(reservation_date_string, "%d-%m-%Y")
